@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
-onLaunch(() => {
-  console.log("App Launch");
-});
-onShow(() => {
-  console.log("App Show");
-});
-onHide(() => {
-  console.log("App Hide");
-});
+import { onBeforeMount } from 'vue';
+
 </script>
-<style></style>
+
+
+<style lang="scss">
+@import "uview-plus/index.scss";
+
+view {
+    box-sizing: border-box;
+}
+</style>

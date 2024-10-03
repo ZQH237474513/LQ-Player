@@ -2,8 +2,11 @@
 一款移动端视频播放软件
 
 ## 构建uniapp-cli应用
-*npx degit dcloudio/uni-preset-vue#vite-ts my-vue3-project*
+```ts
+npx degit dcloudio/uni-preset-vue#vite-ts my-vue3-project
+
 pnpm install -D @dcloudio/types // ts
+```
 ## 开始
 
 ```tsx
