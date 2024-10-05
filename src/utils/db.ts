@@ -29,7 +29,7 @@ export default class Db {
 
 	getItem(key: string) {
 		// #ifdef H5
-		return this.#mydbInstance.getItem(key);
+		return localforage.getItem(key);
 		// #endif
 
 		// #ifdef APP
@@ -38,11 +38,30 @@ export default class Db {
 	}
 	setItem(key: string, data: any) {
 		// #ifdef H5
-		this.#mydbInstance.setItem(key, JSON.parse(JSON.stringify(data)));
+		localforage.setItem(key, JSON.parse(JSON.stringify(data)));
 		// #endif
 
 		// #ifdef APP
-		return uni.setStorageSync(key, JSON.parse(JSON.stringify(data)));
+		uni.setStorageSync(key, JSON.parse(JSON.stringify(data)));
+		// #endif
+	}
+	removeItem(key: string) {
+		// #ifdef H5
+		localforage.removeItem(key);
+		// #endif
+
+		// #ifdef APP
+		uni.removeStorageSync(key);
+		// #endif
+	}
+
+	clearStorage() {
+		// #ifdef H5
+		localforage.clear();
+		// #endif
+
+		// #ifdef APP
+		uni.clearStorageSync();
 		// #endif
 	}
 }

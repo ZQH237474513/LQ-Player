@@ -7,7 +7,7 @@
             <view :style="{ height: `${getSatusBarHeight()}px` }" />
             <view class="searchBar">
                 <up-avatar :src="log"></up-avatar>
-                <up-search class="search" :showAction="false"></up-search>
+                <up-search disabled class="search" :showAction="false"></up-search>
                 <up-icon @click="() => openOrCloseoureModal(true)" name="list" color="#2979ff" size="28"></up-icon>
             </view>
             <view>
@@ -142,12 +142,16 @@ const getClassifyVideoRes = async (params: { classifyList: any[] }) => {
 
 const getClassifyData = async (params: any = {}) => {
 
+
+
     if (!requestInfo.value) {
         return;
     }
 
     const { src, getClassifyList } = requestInfo.value as any;
     let url = `/${src}`
+
+    console.log(getClassifyList);
 
     // #ifdef APP
     url = src;
@@ -164,6 +168,9 @@ const getClassifyData = async (params: any = {}) => {
     classifyList.value = classifyListRes;
     db.setItem('curClassifyList', classifyListRes);
 
+    console.log(JSON.stringify(classifyListRes));
+
+
     getClassifyVideoRes({ classifyList: classifyListRes?.slice(0, classifyPageInfo.basicSize) });
 
 
@@ -172,6 +179,9 @@ const getClassifyData = async (params: any = {}) => {
 
 const comfirmSelectedVideoSoure = ({ value }: any) => {
     const { pluginName } = value[0] as any;
+
+    console.log(pluginName);
+
     requestInfo.value = { ...videoParsePlugin[pluginName], ...value[0] } as any;
     db.setItem('curSelectedVideoSoure', value[0]);
     openOrCloseoureModal();

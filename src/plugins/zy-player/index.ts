@@ -5,14 +5,19 @@ const zyPlayerPlugin = (parentParams: any) => {
 			str = str.endsWith("#") ? str.slice(0, str.length - 1) : str;
 			const arr = str.split("#");
 
-			return arr.map((itemStr) => {
-				const tempArr = itemStr.split("$");
+			return arr
+				.map((itemStr) => {
+					const tempArr = itemStr.split("$");
 
-				return {
-					name: tempArr[0],
-					src: tempArr[1],
-				};
-			});
+					return {
+						name: tempArr[0],
+						src: tempArr[1],
+					};
+				})
+				.filter((item: any) => {
+					const reg = /.m3u8$/gi;
+					return reg.test(item.src);
+				});
 		};
 		const basicConfig: any = {
 			ground: [],
@@ -52,6 +57,9 @@ const zyPlayerPlugin = (parentParams: any) => {
 								const videoList = dd ? parseVideoList(dd?._t || "") : [];
 								delete item.dl;
 								return { ...item, videoList };
+							})
+							.filter((item: any) => {
+								return item.videoList.length;
 							})
 							.sort((a: any, b: any) => {
 								return a.name - b.name;

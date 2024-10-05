@@ -1,5 +1,5 @@
 <template>
-    <view class="videoItemWrapper">
+    <view class="videoItemWrapper" @click="goPlayPage">
         <view class="content">
             <view class="img">
                 <up-image width="100%" :radius="5" mode="scaleToFill" :src="data.pic" :lazy-load="true"> <template
@@ -17,12 +17,22 @@
 
 
 <script setup lang="ts">
-defineProps({
+import { db } from '@utils/index';
+const props = defineProps({
     data: {
         type: Object,
         default: {}
     }
 })
+
+
+const goPlayPage = () => {
+    db.setItem('curPlayerItem', props.data)
+    uni.navigateTo({
+        url: `/pages/play/play?id=${props?.data.id}`
+    })
+
+}
 </script>
 
 

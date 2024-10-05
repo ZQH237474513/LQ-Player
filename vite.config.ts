@@ -6,6 +6,7 @@ import { injectEnv, injectProxyConfig } from "./utils/config";
 
 export default defineConfig(({ mode }) => {
 	return {
+		base: "./",
 		define: { ...injectEnv(mode) },
 		resolve: {
 			alias: {

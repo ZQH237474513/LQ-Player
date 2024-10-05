@@ -2,7 +2,7 @@
 	"extends": "@vue/tsconfig/tsconfig.json",
 	"compilerOptions": {
 		"sourceMap": true,
-		"baseUrl": ".",
+		"baseUrl": "./",
 		"moduleResolution": "Node",
 		"lib": ["esnext", "dom"],
 		"types": ["@dcloudio/types", "uview-plus/types", "@types/uni-app"],

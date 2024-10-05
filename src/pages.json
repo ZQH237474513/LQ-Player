@@ -11,16 +11,10 @@
 	},
 	"pages": [
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "首页",
 				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/soureManagement/soureManagement",
-			"style": {
-				"navigationBarTitleText": "源管理"
 			}
 		},
 		{
@@ -29,7 +23,20 @@
 				"navigationStyle": "custom",
 				"navigationBarTitleText": "我的"
 			}
+		},
+		{
+			"path": "pages/play/play",
+			"style": {
+				"navigationBarTitleText": "播放"
+			}
+		},
+		{
+			"path": "pages/soureManagement/soureManagement",
+			"style": {
+				"navigationBarTitleText": "源管理"
+			}
 		}
+
 		// {
 		// 	"path": "pages/star/star",
 		// 	"style": {
@@ -49,19 +56,13 @@
 		// 		"navigationStyle": "custom"
 		// 	}
 		// },
-		// {
-		// 	"path": "pages/play/play",
-		// 	"style": {
-		// 		"navigationBarTitleText": "播放"
-		// 	}
-		// }
 	],
 	"tabBar": {
 		"color": "#9799a5",
 		"selectedColor": "#28B389",
 		"list": [
 			{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/home/home",
 				"text": "首页"
 				// "iconPath": "./static/images/tabBar/home.png",
 				// "selectedIconPath": "./static/images/tabBar/home-h.png"
