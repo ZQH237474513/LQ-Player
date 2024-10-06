@@ -46,12 +46,20 @@ let classifyPageInfo = {
 }
 
 
+const initDb = async () => {
+    await db.setItem('allClassifyVideoList', []);
+    await db.setItem('curSelectedVideoSoure', {});
+    await db.setItem('curClassifyList', []);
+    allClassifyVideo.vlaue = [];
+    classifyList.vlaue = [];
+
+}
+
+
 const classifyPageInfoInit = () => {
     classifyPageInfo = {
         basicSize: 10,
     }
-    allClassifyVideo.vlaue = [];
-    db.setItem('allClassifyVideoList', []);
 
 }
 
@@ -69,7 +77,9 @@ onShow(() => {
                 requestInfo.value = { ...videoParsePlugin[curSelectedVideoSoure.pluginName], ...curSelectedVideoSoure } as any;
             }
 
-            videoSoureData.value = [videoSoureRes];
+            videoSoureData.value = [videoSoureRes?.filter((item: any) => {
+                return item.isActive;
+            })];
             allClassifyVideo.value = allClassifyVideoRes;
             classifyList.value = curClassifyListRes;
 
@@ -180,7 +190,7 @@ const getClassifyData = async (params: any = {}) => {
 const comfirmSelectedVideoSoure = ({ value }: any) => {
     const { pluginName } = value[0] as any;
 
-    console.log(pluginName);
+    initDb()
 
     requestInfo.value = { ...videoParsePlugin[pluginName], ...value[0] } as any;
     db.setItem('curSelectedVideoSoure', value[0]);

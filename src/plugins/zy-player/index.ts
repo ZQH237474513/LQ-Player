@@ -80,12 +80,18 @@ const zyPlayerPlugin = (parentParams: any) => {
 		getClassifyList: async (params: any) => {
 			const { url } = params;
 			const res: any = await request({ url });
+			if (!res) {
+				return [];
+			}
 			const { ground } = parseXmlToData(res);
 			return ground;
 		},
 		getVideoList: async (params: any) => {
 			const { id = 0, page = 1, url } = params;
 			const res = await request({ url: `${url}?ac=videolist&t=${id}&pg=${page}` });
+			if (!res) {
+				return [];
+			}
 			const { video } = parseXmlToData(res);
 			return video;
 		},
@@ -101,6 +107,9 @@ const zyPlayerPlugin = (parentParams: any) => {
 				const { id, name } = item;
 				try {
 					const res = await request({ url: `${url}?ac=videolist&t=${id}&pg=${page}` });
+					if (!res) {
+						return { name, video: [], id };
+					}
 					const { video } = parseXmlToData(res);
 					return { name, video, id };
 				} catch (e) {

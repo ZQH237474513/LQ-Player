@@ -1,4 +1,6 @@
-const SYSTEM_INFO = uni.getSystemInfoSync();
+export const SYSTEM_INFO = uni.getSystemInfoSync();
+
+console.log(SYSTEM_INFO);
 
 /** 手机状态栏高度 */
 export const getSatusBarHeight: () => number = () => SYSTEM_INFO.statusBarHeight || 15;

@@ -25,13 +25,24 @@ import { ref, onUnmounted, onMounted, nextTick } from 'vue';
 import { getSoureData } from '@apis/index';
 import { db } from '@utils/index';
 
-const sourseUrl = ref('/https://gitee.com/zqhweb/localstorage/raw/master/publice/LQ-Player/video-soure.json');
+let sourseUrl = { value: {} } as any;
+
+// #ifdef H5
+sourseUrl = ref('/https://gitee.com/zqhweb/localstorage/raw/master/publice/LQ-Player/video-soure.json');
+// #endif
+
+// #ifdef APP
+sourseUrl = ref('https://gitee.com/zqhweb/localstorage/raw/master/publice/LQ-Player/video-soure.json');
+// #endif
+
 const videoSoureList: any = ref([]);
 const importSoure = async () => {
-    // const reg = /^(http)|^(https):\/\//ig;
-    // if (!reg.test(sourseUrl.value)) {
-    //     return;
-    // }
+    // #ifdef APP
+    const reg = /^(http)|^(https):\/\//ig;
+    if (!reg.test(sourseUrl.value)) {
+        return;
+    }
+    // #endif
 
     const res: any = await getSoureData(sourseUrl.value);
     videoSoureList.value = res;
