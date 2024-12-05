@@ -1,7 +1,7 @@
 <template>
     <view>
-        <up-picker ref="uPickerRef" :defaultIndex="[2]" :show="showSoureModal" keyName="name" :columns="videoSoureData"
-            closeOnClickOverlay @cancel="openOrCloseoureModal" @close="openOrCloseoureModal"
+        <up-picker ref="uPickerRef" :defaultIndex="defaultIndex" :show="showSoureModal" keyName="name"
+            :columns="videoSoureData" closeOnClickOverlay @cancel="openOrCloseoureModal" @close="openOrCloseoureModal"
             @confirm="comfirmSelectedVideoSoure"></up-picker>
         <view class="layoutWrapper">
             <view :style="{ height: `${getSatusBarHeight()}px` }" />
@@ -10,7 +10,7 @@
                 <up-search disabled class="search" :showAction="false"></up-search>
                 <up-icon @click="() => openOrCloseoureModal(true)" name="list" color="#2979ff" size="28"></up-icon>
             </view>
-            <view>
+            <view class="mainContent">
                 <video-classify-card v-for="item, i in allClassifyVideo" :data="item" />
             </view>
         </view>
@@ -39,6 +39,8 @@ const classifyList: any = ref([]);
 const requestInfo: any = ref(null);
 const loadingFlag: any = ref(false);
 
+const defaultIndex = ref([0]);
+
 
 
 let classifyPageInfo = {
@@ -46,14 +48,6 @@ let classifyPageInfo = {
 }
 
 
-const initDb = async () => {
-    await db.setItem('allClassifyVideoList', []);
-    await db.setItem('curSelectedVideoSoure', {});
-    await db.setItem('curClassifyList', []);
-    allClassifyVideo.vlaue = [];
-    classifyList.vlaue = [];
-
-}
 
 
 const classifyPageInfoInit = () => {
@@ -108,7 +102,7 @@ onReachBottom(async () => {
 
 })
 
-const openOrCloseoureModal = (flag = false) => {
+const openOrCloseoureModal = async (flag = false) => {
     if (flag && !videoSoureData.value[0]?.length) {
         uni.showToast({
             title: '当前无任何片源,请导入片源后再重新点击!',
@@ -117,6 +111,29 @@ const openOrCloseoureModal = (flag = false) => {
         })
         return;
     }
+
+
+
+    // 获取当前值的下标 ,设置picker默认值;
+
+    const curSelectedVideoSoure = await db.getItem('curSelectedVideoSoure');
+
+    if (!curSelectedVideoSoure) {
+        defaultIndex.value = [0];
+
+    } else {
+        const videoSoureRes = await db.getItem('videoSoureList');
+        const curSoureIndex = videoSoureRes.findIndex((item: any) => {
+            return item.name === curSelectedVideoSoure.name
+        });
+        if (curSoureIndex !== -1) {
+            defaultIndex.value = [curSoureIndex];
+
+        }
+
+    }
+
+    // 弹出picker model
     showSoureModal.value = flag;
 }
 
@@ -141,8 +158,9 @@ const getClassifyVideoRes = async (params: { classifyList: any[] }) => {
         if (!allClassifyVideoRes) {
             return false;
         }
-        allClassifyVideo.value = [...JSON.parse(JSON.stringify(allClassifyVideo?.value || [])), ...allClassifyVideoRes];
-        db.setItem('allClassifyVideoList', allClassifyVideo.value);
+        // allClassifyVideo.value = [...JSON.parse(JSON.stringify(allClassifyVideo?.value || [])), ...allClassifyVideoRes];
+        allClassifyVideo.value = allClassifyVideoRes;
+        db.setItem('allClassifyVideoList', allClassifyVideoRes);
         loadingFlag.value = false
     } finally {
         setTimeout(() => loadingFlag.value = false, 3e3)
@@ -188,9 +206,8 @@ const getClassifyData = async (params: any = {}) => {
 
 
 const comfirmSelectedVideoSoure = ({ value }: any) => {
-    const { pluginName } = value[0] as any;
 
-    initDb()
+    const { pluginName } = value[0] as any;
 
     requestInfo.value = { ...videoParsePlugin[pluginName], ...value[0] } as any;
     db.setItem('curSelectedVideoSoure', value[0]);
@@ -209,14 +226,24 @@ const comfirmSelectedVideoSoure = ({ value }: any) => {
 <style lang="scss" scoped>
 .layoutWrapper {
     .searchBar {
+        position: fixed;
+        z-index: 999;
+        background-color: #fff;
+        width: 100%;
+        // height: ;
+        top: 0;
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        padding: 0 20rpx;
+        padding: 15rpx 20rpx;
 
         .search {
             padding: 0 20rpx;
         }
+    }
+
+    .mainContent {
+        margin-top: 80rpx;
     }
 }
 </style>

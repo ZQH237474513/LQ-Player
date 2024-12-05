@@ -76,7 +76,9 @@ const zyPlayerPlugin = (parentParams: any) => {
 
 		return basicConfig;
 	};
-	return {
+
+	const requestMethod = {
+		/** 获取分类 */
 		getClassifyList: async (params: any) => {
 			const { url } = params;
 			const res: any = await request({ url });
@@ -84,6 +86,9 @@ const zyPlayerPlugin = (parentParams: any) => {
 				return [];
 			}
 			const { ground } = parseXmlToData(res);
+
+			console.log(ground);
+
 			return ground;
 		},
 		getVideoList: async (params: any) => {
@@ -125,6 +130,7 @@ const zyPlayerPlugin = (parentParams: any) => {
 			return res;
 		},
 	};
+	return requestMethod;
 };
 
 export default zyPlayerPlugin;

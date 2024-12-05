@@ -2,6 +2,11 @@
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { onBeforeMount } from 'vue';
 
+
+
+uni.$test = 'hellow word!';
+
+
 </script>
 
 

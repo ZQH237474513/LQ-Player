@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
 				"@apis": resolve(__dirname, "src/apis"),
 				"@utils": resolve(__dirname, "src/utils"),
 				"@plugins": resolve(__dirname, "src/plugins"),
+				"@store": resolve(__dirname, "src/store"),
 			},
 			extensions: ["...", ".mjs", ".js", ".ts", ".tsx", ".json"],
 		},

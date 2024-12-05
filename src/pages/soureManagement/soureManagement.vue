@@ -3,7 +3,8 @@
         <view class="importSoure">
             <up-input v-model="sourseUrl" placeholder="请输入url" clearable />
             <view class="btn">
-                <up-button @click="importSoure" :customStyle="{ height: '50rpx' }" text="导入" type="primary" size="mini" />
+                <up-button @click="importSourehandle" :customStyle="{ height: '50rpx' }" text="导入" type="primary"
+                    size="mini" />
             </view>
 
         </view>
@@ -24,6 +25,16 @@
 import { ref, onUnmounted, onMounted, nextTick } from 'vue';
 import { getSoureData } from '@apis/index';
 import { db } from '@utils/index';
+import store from '@store/index';
+
+const { videoStore: { VideoSoure } } = store;
+
+
+const videoSoure = new VideoSoure();
+
+console.log(videoSoure);
+
+
 
 let sourseUrl = { value: {} } as any;
 
@@ -36,7 +47,9 @@ sourseUrl = ref('https://gitee.com/zqhweb/localstorage/raw/master/publice/LQ-Pla
 // #endif
 
 const videoSoureList: any = ref([]);
-const importSoure = async () => {
+
+/** 导入数据源 */
+const importSourehandle = async () => {
     // #ifdef APP
     const reg = /^(http)|^(https):\/\//ig;
     if (!reg.test(sourseUrl.value)) {
@@ -45,25 +58,15 @@ const importSoure = async () => {
     // #endif
 
     const res: any = await getSoureData(sourseUrl.value);
-    videoSoureList.value = res;
-
-    let videoSoureData = await db.getItem('videoSoureList');
 
 
-    if (!videoSoureData) {
-        db.setItem('videoSoureList', res)
-    } else {
-        const allKey = videoSoureData.map((item: any) => {
-            return item.key
-        });
-
-        videoSoureData = [videoSoureData, ...res.filter((item: any) => {
-            return !allKey.includes(item.key)
-        })]
-        db.setItem('videoSoureList', videoSoureData)
+    if (!res) {
+        return;
     }
 
-    nextTick()
+    videoSoure.bathSetVideoSoure(res);
+
+    videoSoureList.value = res;
 
 }
 

@@ -19,6 +19,8 @@ const request = (config: requersConfig) => {
 			success: (res: any) => {
 				if (res.statusCode === 200) {
 					resolve(res.data);
+				} else {
+					resolve([]);
 				}
 			},
 			fail: (err: any) => {

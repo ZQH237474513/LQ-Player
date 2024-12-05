@@ -13,7 +13,8 @@
 			"@components/*": ["src/components/*"],
 			"@utils/*": ["src/utils/inde", "src/utils/*"],
 			"@apis/*": ["src/apis/*"],
-			"@plugins/*": ["src/plugins/*"]
+			"@plugins/*": ["src/plugins/*"],
+			"@store/*": ["src/store/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
