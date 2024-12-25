@@ -11,7 +11,7 @@
                 <up-icon @click="() => openOrCloseoureModal(true)" name="list" color="#2979ff" size="28"></up-icon>
             </view>
             <view class="mainContent">
-                <video-classify-card v-for="item, i in allClassifyVideo" :data="item" />
+                <video-classify-card v-for="item, i in homeVideo" :data="item" />
             </view>
         </view>
         <view class=" loadingLayout">
@@ -28,13 +28,16 @@ import icons from '@src/utils/icons';
 import { db } from '@src/utils/index';
 import videoParsePlugin from '@plugins/index';
 import videoClassifyCard from '@components/video-classify-card/video-classify-card.vue'
-
+import { useVideoStore } from '../../store/video'
+import { storeToRefs } from 'pinia'
 const { log } = icons;
+
+const videoStore = useVideoStore();
+const { homeVideo } = storeToRefs(videoStore)
 
 const videoSoureData = ref([[]]);
 const showSoureModal = ref(false);
 const uPickerRef: any = ref(null);
-const allClassifyVideo: any = ref([]);
 const classifyList: any = ref([]);
 const requestInfo: any = ref(null);
 const loadingFlag: any = ref(false);
@@ -74,7 +77,7 @@ onShow(() => {
             videoSoureData.value = [videoSoureRes?.filter((item: any) => {
                 return item.isActive;
             })];
-            allClassifyVideo.value = allClassifyVideoRes;
+            homeVideo.value = allClassifyVideoRes;
             classifyList.value = curClassifyListRes;
 
             loadingFlag.value = false
@@ -87,18 +90,18 @@ onShow(() => {
 
 onReachBottom(async () => {
 
-    const videoSoureRes = await db.getItem('curClassifyList');
-    const allClassifyVideoRes = await db.getItem('allClassifyVideoList');
+    // const videoSoureRes = await db.getItem('curClassifyList');
+    // const allClassifyVideoRes = await db.getItem('allClassifyVideoList');
 
-    if (allClassifyVideoRes.length >= videoSoureRes.length) {
-        return;
-    }
+    // if (allClassifyVideoRes.length >= videoSoureRes.length) {
+    //     return;
+    // }
 
 
-    const start = allClassifyVideoRes.length;
-    const end = allClassifyVideoRes.length + classifyPageInfo.basicSize;
+    // const start = allClassifyVideoRes.length;
+    // const end = allClassifyVideoRes.length + classifyPageInfo.basicSize;
 
-    getClassifyVideoRes({ classifyList: videoSoureRes.slice(start, end) });
+    // getClassifyVideoRes({ classifyList: videoSoureRes.slice(start, end) });
 
 })
 
@@ -159,7 +162,7 @@ const getClassifyVideoRes = async (params: { classifyList: any[] }) => {
             return false;
         }
         // allClassifyVideo.value = [...JSON.parse(JSON.stringify(allClassifyVideo?.value || [])), ...allClassifyVideoRes];
-        allClassifyVideo.value = allClassifyVideoRes;
+        homeVideo.value = allClassifyVideoRes;
         db.setItem('allClassifyVideoList', allClassifyVideoRes);
         loadingFlag.value = false
     } finally {
@@ -178,8 +181,6 @@ const getClassifyData = async (params: any = {}) => {
 
     const { src, getClassifyList } = requestInfo.value as any;
     let url = `/${src}`
-
-    console.log(getClassifyList);
 
     // #ifdef APP
     url = src;

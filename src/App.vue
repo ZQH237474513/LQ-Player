@@ -4,7 +4,7 @@ import { onBeforeMount } from 'vue';
 
 
 
-uni.$test = 'hellow word!';
+
 
 
 </script>
